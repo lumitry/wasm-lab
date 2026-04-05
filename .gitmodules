@@ -1,0 +1,6 @@
+[submodule "punchy"]
+	path = punchy
+	url = https://github.com/fishfolk/punchy.git
+[submodule "jumpy"]
+	path = jumpy
+	url = https://github.com/fishfolk/jumpy.git
