@@ -1,0 +1,10 @@
+FROM docker.io/emscripten/emsdk:latest
+
+ENV CARGO_HOME=/usr/local/cargo
+ENV PATH=${CARGO_HOME}/bin:${PATH}
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y rustup \
+    && rustup default stable \
+    && rustup target add wasm32-unknown-unknown \
+    && cargo install trunk

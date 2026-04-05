@@ -1,0 +1,7 @@
+{
+    // "image": "docker.io/emscripten/emsdk:latest",
+    "build": {
+        "dockerfile": "Containerfile"
+    },
+    "forwardPorts": [8000]
+}
