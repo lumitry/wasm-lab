@@ -41,4 +41,7 @@ Then open `http://localhost:8000` in your browser. Works on desktop as well; see
 
 - `Serve jumpy`
 - `Serve punchy`
-- `CMake Compile` followed by `CMake Serve`
+- `CMake Compile` followed by `CMake Serve`*
+
+* Requires finding a CMake based project. You can find some here: https://github.com/bobeff/open-source-games.
+This is more of an exercise to let you see how hard cross-compiling can be by default.

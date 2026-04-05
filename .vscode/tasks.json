@@ -68,6 +68,68 @@
                     "endsPattern": "server listening at"
                 }
             }
+        },
+        {
+            "label": "CMake Patch",
+            "type": "shell",
+            "command": "sed -i 's/,--as-needed//g' CMakeLists.txt",
+            "options": {
+                "cwd": "${workspaceFolder}/insert-here"
+            }
+        },
+        {
+            "label": "mkdir",
+            "type": "shell",
+            "command": "mkdir -p build-wasm",
+            "options": {
+                "cwd": "${workspaceFolder}/insert-here"
+            },
+            "dependsOn": "CMake Patch"
+        },
+        {
+            "label": "CMake",
+            "type": "shell",
+            "command": "emcmake cmake .. -DCMAKE_C_FLAGS='-pthread' -DCMAKE_CXX_FLAGS='-pthread'",
+            "options": {
+                "cwd": "${workspaceFolder}/insert-here/build-wasm"
+            },
+            "dependsOn": "mkdir"
+        },
+        {
+            "label": "Compile CMake",
+            "type": "shell",
+            "command": "emmake make",
+            "options": {
+                "cwd": "${workspaceFolder}/insert-here/build-wasm"
+            },
+            "dependsOn": "CMake",
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "Serve CMake",
+            "type": "shell",
+            "command": "python3 ../../.wasm/serve.py",
+            "options": {
+                "cwd": "${workspaceFolder}/insert-here/build-wasm"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": "^(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Serving HTTP",
+                    "endsPattern": "Serving HTTP"
+                }
+            }
         }
     ]
 }
