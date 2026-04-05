@@ -1,3 +1,5 @@
 dist/
 jumpy/index.*
 punchy/index.*
+build/
+__pycache__/

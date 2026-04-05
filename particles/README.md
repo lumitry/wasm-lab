@@ -5,14 +5,14 @@ This is a simple project to demonstrate how WASM can be used to run desktop appl
 ## Running The Desktop App
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r ../requirements.txt
 python3 particles.py
 ```
 
 ## Running The Web Port
 
 ```bash
-python3 -m pip install -r requirements.txt # if not done already
+python3 -m pip install -r ../requirements.txt # if not done already
 python3 -m pygbag .
 ```
 
