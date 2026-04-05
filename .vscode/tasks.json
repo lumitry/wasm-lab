@@ -1,0 +1,73 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Setup Punchy",
+            "type": "shell",
+            "command": "cp .wasm/index.* punchy/ && cd punchy/ && rustup override set 1.78.0 && rustup target add wasm32-unknown-unknown --toolchain 1.78.0"
+        },
+        {
+            "label": "Serve Punchy",
+            "type": "shell",
+            "command": "trunk serve --release",
+            "options": {
+                "cwd": "${workspaceFolder}/punchy"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "Setup Punchy",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": "^(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "starting server",
+                    "endsPattern": "server listening at"
+                }
+            }
+        },
+        {
+            "label": "Setup Jumpy",
+            "type": "shell",
+            "command": "cp .wasm/index.* jumpy/ && cd jumpy/ && rustup target add wasm32-unknown-unknown"
+        },
+        {
+            "label": "Serve Jumpy",
+            "type": "shell",
+            "command": "trunk serve --release",
+            "options": {
+                "cwd": "${workspaceFolder}/jumpy"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "dependsOn": "Setup Jumpy",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": "^(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "starting server",
+                    "endsPattern": "server listening at"
+                }
+            }
+        }
+    ]
+}
