@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS vs Pyodide Benchmark</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+</head>
+<body>
+    <h1>JavaScript vs Python (Pyodide) Benchmark</h1>
+    <button id="run">Run Benchmark</button>
+    <pre id="output"></pre>
+
+    <script>
+        // Load Pyodide once
+        let pyodideReady = loadPyodide();
+
+        // JS factorial (loop version)
+        function jsFactorial(n) {
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        async function runBenchmark() {
+            const output = document.getElementById("output");
+            output.textContent = "Running...\n";
+
+            const number = 10;
+            const iterations = 500000;
+
+            // ---- JavaScript Benchmark ----
+            const jsStart = performance.now();
+
+            let jsResult;
+            for (let i = 0; i < iterations; i++) {
+                jsResult = jsFactorial(number);
+            }
+
+            const jsEnd = performance.now();
+            const jsTime = (jsEnd - jsStart).toFixed(2);
+
+            // ---- Pyodide Benchmark ----
+            const pyodide = await pyodideReady;
+
+            const pythonCode = `
+                import time
+
+                def factorial(n):
+                    result = 1
+                    for i in range(2, n + 1):
+                        result *= i
+                    return result
+
+                number = ${number}
+                iterations = ${iterations}
+
+                start = time.perf_counter()
+
+                for _ in range(iterations):
+                    result = factorial(number)
+
+                end = time.perf_counter()
+
+                (result, end - start)
+                            `;
+
+                            const [pyResult, pyTime] = pyodide.runPython(pythonCode).toJs();
+
+                            // ---- Output ----
+                            output.textContent =
+                `Factorial(${number}) repeated ${iterations} times
+
+                JavaScript:
+                Result
+                Time: ${jsTime} ms
+
+                Python (Pyodide):
+                Result: ${pyResult}
+                Time: ${(pyTime * 1000).toFixed(2)} ms
+
+                Slowdown: ${( (pyTime * 1000) / jsTime ).toFixed(1)}x slower`;
+                        }
+                document.getElementById("run").addEventListener("click", runBenchmark);
+    </script>
+</body>
+</html>
